@@ -3,13 +3,26 @@ use std::io;
 fn main() {
     println!("Welcome to the Median & Mode solver!");
 
-    let arr = read_vector_of_integers_from_user_input();
+    let mut arr = read_vector_of_integers_from_user_input();
 
     println!("You've entered {:?}", arr);
+
+    arr.sort_unstable();
+
+    println!("Sorted array: {:?}", arr);
+
+    println!("The median is {}", calculate_median_of_sorted_array(&arr))
+}
+
+fn calculate_median_of_sorted_array(arr: &Vec<usize>) -> f64 {
+    if arr.len() % 2 == 0 {
+        (arr[arr.len() / 2] + arr[arr.len() / 2 - 1]) as f64 / 2.0
+    } else {
+        arr[arr.len() / 2] as f64
+    }
 }
 
 fn read_vector_of_integers_from_user_input() -> Vec<usize> {
-
     'upper_loop: loop {
         println!("Please, enter the array of unsigned integers spliited by ','");
 
