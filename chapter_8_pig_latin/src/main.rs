@@ -6,7 +6,6 @@ enum LetterTypes {
     Consonant
 }
 
-
 fn main() {
     println!("Welcome to the words pig latinizer!");
 
@@ -20,9 +19,9 @@ fn main() {
 
     let words: Vec<&str> = input.split(' ').collect();
 
-    println!("You've entered {:?}", words);
+    // println!("You've entered {:?}", words);
 
-    // let mut res: Vec<&str> = vec!();
+    let mut res = String::new();
 
     let mut vowels: HashMap<char, LetterTypes> = HashMap::new();
     vowels.insert('a', LetterTypes::Vowel);
@@ -33,15 +32,20 @@ fn main() {
     
 
     for word in words {
+        let word = word.trim();
         let chars: Vec<char> = word.to_lowercase().chars().collect();
         match chars.first() {
             Some(c) => {
                 let letter_type = vowels.get(c).unwrap_or(&LetterTypes::Consonant);
-                println!("The first char of world '{}' is '{c}' and it is {:?}", word.trim(), letter_type);
+                // println!("The first char of world '{word}' is '{c}' and it is {:?}", letter_type);
+                match letter_type {
+                    LetterTypes::Vowel => res = res + word + "-hay ",
+                    LetterTypes::Consonant => res = res + &word[1..] + "-" + &word[..1] + "ay ",
+                };
             },
             None => ()
         }
-        
     }
 
+    println!("The result is {}", res)
 }
