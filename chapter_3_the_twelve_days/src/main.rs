@@ -39,7 +39,7 @@ fn main() {
     while index < 12 {
         println!("On the {} day of Christmas, \n{SECOND_LINE}", NUMERICALS[index]);
 
-        for i in (12 - index - 1 .. 12) {
+        for i in 12 - index - 1 .. 12 {
             println!("{}", PRESENTS[i]);
         }
 
