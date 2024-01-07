@@ -11,7 +11,38 @@ fn main() {
 
     println!("Sorted array: {:?}", arr);
 
-    println!("The median is {}", calculate_median_of_sorted_array(&arr))
+    println!("The median is {}", calculate_median_of_sorted_array(&arr));
+
+    println!("The mode is {}", calculate_mode_of_sorted_array(&arr));
+}
+
+fn calculate_mode_of_sorted_array(arr: &Vec<usize>) -> usize {
+    struct Freq {
+        value: usize,
+        quantity: usize
+    }
+
+    let mut max_freq = Freq{ value: 0, quantity: 0 };
+    let mut current_freq = Freq{ value: 0, quantity: 0 };
+
+    for val in arr {
+        if *val == current_freq.value {
+            current_freq.quantity += 1;
+        } else {
+            if current_freq.quantity > max_freq.quantity {
+                max_freq = Freq{ .. current_freq };
+            }
+
+            current_freq = Freq{ quantity: 1, value: *val };
+        }
+    }
+
+    if current_freq.quantity > max_freq.quantity {
+        max_freq = Freq{ .. current_freq };
+    }
+
+    max_freq.value
+
 }
 
 fn calculate_median_of_sorted_array(arr: &Vec<usize>) -> f64 {
