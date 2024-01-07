@@ -1,26 +1,45 @@
 use std::{io, collections::HashMap};
 
 #[derive(Debug)]
+enum ListingType {
+    All,
+    Department { department_name: String }
+}
+
+#[derive(Debug)]
 enum Command {
     Help,
     Exit,
     Add { name: String, department: String },
-    List,
+    List { listing_type: ListingType },
     Unknown
 }
 
 impl Command {
     fn parse_command(command_line: &str) -> Command {
-        let command_line = command_line.trim().to_lowercase();
-        if command_line == "help" {
+        let command_line_lowercase = command_line.trim().to_lowercase();
+        if command_line_lowercase == "help" {
             Command::Help
-        } else if command_line == "exit" {
+        } else if command_line_lowercase == "exit" {
             Command::Exit
-        } else if command_line == "list" {
-            Command::List
-        } else if command_line.starts_with("add") {
+        } else if command_line_lowercase.starts_with("list") {
+            let list_command_split: Vec<&str> = command_line.split_whitespace().collect();
+            if list_command_split.len() == 2 {
+                if list_command_split[1].to_lowercase() == "all" {
+                    Command::List { listing_type: ListingType::All }
+                } else {
+                    Command::List { listing_type: ListingType::Department { department_name: list_command_split[1].to_string() } }
+                }
+            } else {
+                Command::Unknown
+            }
+        } else if command_line_lowercase.starts_with("add") {
             let add_command_split: Vec<&str> = command_line.split_whitespace().collect();
-            Command::Add { name: add_command_split[1].to_string(), department: add_command_split[3].to_string() }
+            if add_command_split.len() == 4 && add_command_split[2].to_lowercase() == "to" && add_command_split[2].to_lowercase() != "all" {
+                Command::Add { name: add_command_split[1].to_string(), department: add_command_split[3].to_string() }
+            } else {
+                Command::Unknown
+            }
         } else {
             Command::Unknown
         }
@@ -43,8 +62,18 @@ fn main() {
         let command = Command::parse_command(&input);
 
         match command {
-            Command::Help => println!("Use `exit` to exit the program\nUse `add X to Y` to add person `X` to department `Y`"),
-            Command::List => println!("The current DB state is: {:#?}", database),
+            Command::Help => {
+                println!("Use `exit` to exit the program");
+                println!("Use `add X to Y` to add person `X` to department `Y`");
+                println!("Use `list ALL` to show all people in the company and `list X` to show people in department `X`");
+            },
+            Command::List { listing_type: ListingType::All } => println!("The people working in the company: {:#?}", database),
+            Command::List { listing_type: ListingType::Department { department_name } } => {
+                match database.get(&department_name) {
+                    Some(people) => println!("The people working in {department_name}: {:#?}", people),
+                    None => println!("Whoops, seems no one's working in department {department_name}")
+                }
+            },
             Command::Add { name, department } => {
                 println!("Adding {name} to {department}");
                 match database.get_mut(&department) {
