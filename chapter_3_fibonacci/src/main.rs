@@ -25,9 +25,9 @@ fn get_fibonacci(n: u16) -> u64 {
         n.into()
     } else {
         let mut fibonacci_last_3 = (0, 1, 1);
-        let mut mut_current_index = 2;
-        while mut_current_index < n {
-            mut_current_index += 1;
+        let mut current_index = 2;
+        while current_index < n {
+            current_index += 1;
             fibonacci_last_3 = (
                 fibonacci_last_3.1,
                 fibonacci_last_3.2,
