@@ -1,5 +1,5 @@
 [package]
-name = "chapter_8_pig_latin"
+name = "chapter_03_fibonacci"
 version = "0.1.0"
 edition = "2021"
 

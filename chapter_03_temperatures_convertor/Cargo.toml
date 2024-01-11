@@ -1,5 +1,5 @@
 [package]
-name = "chapter_3_the_twelve_days"
+name = "chapter_03_temperatures_convertor"
 version = "0.1.0"
 edition = "2021"
 
